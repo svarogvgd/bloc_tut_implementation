@@ -1,16 +1,16 @@
 import 'dart:async';
 
 import 'package:my_bloc_tut/bloc/counter_event.dart';
+import 'package:my_bloc_tut/bloc/counter_state.dart';
 
 class CounterBloc {
   int _counter = 0;
   CounterBloc() {
     _counterEventController.stream.listen(mapEventToState);
-    _counterStateController.add(_counter);
   }
-  final _counterStateController = StreamController<int>();
-  StreamSink<int> get _inCounter => _counterStateController.sink;
-  Stream<int> get counter => _counterStateController.stream;
+  final _counterStateController = StreamController<CounterState>();
+  StreamSink<CounterState> get _inCounter => _counterStateController.sink;
+  Stream<CounterState> get counter => _counterStateController.stream;
 
   final _counterEventController = StreamController<CounterEvent>();
   StreamSink<CounterEvent> get counterEventSink => _counterEventController.sink;
@@ -21,7 +21,7 @@ class CounterBloc {
     } else {
       _counter--;
     }
-    _inCounter.add(_counter);
+    _inCounter.add(CounterStateNewValue(counter: _counter));
   }
 
   dispose() {
